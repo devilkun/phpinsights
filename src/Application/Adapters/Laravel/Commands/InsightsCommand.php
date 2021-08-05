@@ -10,6 +10,7 @@ use NunoMaduro\PhpInsights\Application\Console\Commands\AnalyseCommand;
 use NunoMaduro\PhpInsights\Application\Console\Definitions\AnalyseDefinition;
 use NunoMaduro\PhpInsights\Domain\Configuration;
 use NunoMaduro\PhpInsights\Domain\Container;
+use NunoMaduro\PhpInsights\Domain\Exceptions\InvalidConfiguration;
 use NunoMaduro\PhpInsights\Domain\Kernel;
 use NunoMaduro\PhpInsights\Domain\Reflection;
 use RuntimeException;
@@ -20,6 +21,13 @@ use Symfony\Component\Console\Output\ConsoleOutputInterface;
  */
 final class InsightsCommand extends Command
 {
+    private const FUNDING_MESSAGES = [
+        '  - Star or contribute to PHP Insights:',
+        '    <options=bold>https://github.com/nunomaduro/phpinsights</>',
+        '  - Sponsor the maintainers:',
+        '    <options=bold>https://github.com/sponsors/nunomaduro</>',
+    ];
+
     protected $name = 'insights';
 
     protected $description = 'Analyze the code quality';
@@ -37,7 +45,17 @@ final class InsightsCommand extends Command
 
         $configuration = require $configPath;
         $configuration['fix'] = $this->hasOption('fix') && (bool) $this->option('fix') === true;
-        $configuration = ConfigResolver::resolve($configuration, $this->input);
+        try {
+            $configuration = ConfigResolver::resolve($configuration, $this->input);
+        } catch (InvalidConfiguration $exception) {
+            $this->output->writeln([
+                '',
+                '  <bg=red;options=bold> Invalid configuration </>',
+                '    <fg=red>•</> <options=bold>' . $exception->getMessage() . '</>',
+                '',
+            ]);
+            return 1;
+        }
 
         $container = Container::make();
         if (! $container instanceof \League\Container\Container) {
@@ -54,7 +72,9 @@ final class InsightsCommand extends Command
         $result = $analyseCommand->__invoke($this->input, $output);
 
         if ($output instanceof ConsoleOutputInterface) {
-            $output->getErrorOutput()->writeln('✨ See something that needs to be improved? <options=bold>Create an issue</> or send us a <options=bold>pull request</>: <fg=cyan;options=bold>https://github.com/nunomaduro/phpinsights</>');
+            foreach (self::FUNDING_MESSAGES as $message) {
+                $output->getErrorOutput()->writeln($message);
+            }
         }
 
         return $result;

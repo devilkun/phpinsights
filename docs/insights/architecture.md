@@ -29,7 +29,7 @@ This sniff checks if the declaration of the class is correct
 
 **Insight Class**: `PHP_CodeSniffer\Standards\PSR1\Sniffs\Classes\ClassDeclarationSniff`
 
-## Class trait and interface length <Badge text="^1.0"/> <Badge text="Architecture\Classes" type="warn"/> <Badge text="configurable"/>
+## Class trait and interface length <Badge text=">=1.0 <2.0"/> <Badge text="Architecture\Classes" type="warn"/> <Badge text="configurable"/>
 
 This sniff checks the size of your classes/traits/interface
 
@@ -45,7 +45,7 @@ This sniff checks the size of your classes/traits/interface
 ```
 </details>
 
-## Method per class limit <Badge text="^1.0"/> <Badge text="Architecture\Classes" type="warn"/> <Badge text="configurable"/>
+## Method per class limit <Badge text=">=1.0 <2.0"/> <Badge text="Architecture\Classes" type="warn"/> <Badge text="configurable"/>
 
 This sniff checks if the number of methods per class is under a limit.
 
@@ -61,8 +61,7 @@ This sniff checks if the number of methods per class is under a limit.
 ```
 </details>
 
-
-## Property per class limit <Badge text="^1.0"/> <Badge text="Architecture\Classes" type="warn"/> <Badge text="configurable"/>
+## Property per class limit <Badge text=">=1.0 <2.0"/> <Badge text="Architecture\Classes" type="warn"/> <Badge text="configurable"/>
 
 This sniff checks if the number of properties per class is under a limit.
 
@@ -114,6 +113,18 @@ This insight checks if the `composer.json` is valid.
 
 **Insight Class**: `NunoMaduro\PhpInsights\Domain\Insights\Composer\ComposerMustBeValid`
 
+<details>
+   <summary>Configuration</summary>
+
+```php
+ComposerMustBeValid::class => [
+    //optional configuration value for composer version 2 only
+    //you can allow 'version' in your composer.json and disable the check of it so that you don't get an error
+    'composerVersionCheck' => 0,
+]
+```
+</details>
+
 ## Composer.lock must be fresh <Badge text="^1.7"/> <Badge text="Architecture\Composer" type="warn"/>
 
 This insight verifies that the `composer.lock` is not outdated.
@@ -136,7 +147,7 @@ This sniff reports use of superfluous prefix or suffix "Exception" for exception
 
 This sniff checks the size of functions
 
-**Insight Class**: `ObjectCalisthenics\Sniffs\Files\FunctionLengthSniff`
+**Insight Class v1.0**: `ObjectCalisthenics\Sniffs\Files\FunctionLengthSniff`
 
 <details>
     <summary>Configuration</summary>
@@ -144,6 +155,18 @@ This sniff checks the size of functions
 ```php
 \ObjectCalisthenics\Sniffs\Files\FunctionLengthSniff::class => [
     'maxLength' => 20,
+]
+```
+</details>
+
+**Insight Class v2.0**: `SlevomatCodingStandard\Sniffs\Functions\FunctionLengthSniff`
+
+<details>
+    <summary>Configuration</summary>
+
+```php
+\SlevomatCodingStandard\Sniffs\Functions\FunctionLengthSniff::class => [
+    'maxLinesLength' => 20,
 ]
 ```
 </details>

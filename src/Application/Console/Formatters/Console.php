@@ -105,9 +105,15 @@ final class Console implements Formatter
 
     private Configuration $config;
 
+    private bool $summaryOnly = false;
+
     public function __construct(InputInterface $input, OutputInterface $output)
     {
         $this->style = new Style($input, $output);
+
+        if ($input->hasOption('summary')) {
+            $this->summaryOnly = (bool) $input->getOption('summary');
+        }
         $this->totalWidth = (new Terminal())->getWidth();
 
         $outputFormatterStyle = new OutputFormatterStyle();
@@ -132,7 +138,9 @@ final class Console implements Formatter
             ->architecture($insightCollection, $results)
             ->miscellaneous($results);
 
-        $this->issues($insightCollection, $metrics, $insightCollection->getCollector()->getCommonPath());
+        if (! $this->summaryOnly) {
+            $this->issues($insightCollection, $metrics, $insightCollection->getCollector()->getCommonPath());
+        }
 
         if ($this->config->hasFixEnabled()) {
             $this->formatFix($insightCollection, $metrics);
@@ -175,9 +183,9 @@ final class Console implements Formatter
         }
 
         $this->style->success(sprintf('🧙 ️Congrats ! %s %s', $totalFix, $message));
-        $this->style->writeln(sprintf('<fg=yellow;options=bold>%s issues remaining</>', $totalIssues));
-        $this->style->newLine();
-
+        if ($this->summaryOnly) {
+            $metrics = [];
+        }
         foreach ($metrics as $metricClass) {
             $category = explode('\\', $metricClass);
             $category = $category[count($category) - 2];
@@ -212,6 +220,7 @@ final class Console implements Formatter
             }
         }
 
+        $this->style->writeln(sprintf('<fg=yellow;options=bold>%s issues remaining</>', $totalIssues));
         $this->style->newLine();
     }
 
@@ -618,6 +627,8 @@ final class Console implements Formatter
             $detailString = '';
 
             foreach (explode(PHP_EOL, $detail->getMessage()) as $line) {
+                $detailString .= PHP_EOL;
+
                 if (mb_strpos($line, '-') === 0) {
                     $hasColor = true;
                     $detailString .= '<fg=red>';
@@ -628,7 +639,7 @@ final class Console implements Formatter
                     $detailString .= '<fg=green>';
                 }
 
-                $detailString .= OutputFormatter::escape($line) . PHP_EOL;
+                $detailString .= OutputFormatter::escape($line);
 
                 if ($hasColor) {
                     $hasColor = false;
