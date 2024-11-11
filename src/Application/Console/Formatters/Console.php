@@ -51,25 +51,25 @@ final class Console implements Formatter
 
     private const QUALITY = <<<EOD
     <%quality_color%>%block_size%</>
-    <fg=black;options=bold;%quality_color%>  %quality%  </>
+    <fg=white;options=bold;%quality_color%>  %quality%  </>
     <%quality_color%>%block_size%</>
     EOD;
 
     private const COMPLEXITY = <<<EOD
     <%complexity_color%>%block_size%</>
-    <fg=black;options=bold;%complexity_color%>  %complexity%  </>
+    <fg=white;options=bold;%complexity_color%>  %complexity%  </>
     <%complexity_color%>%block_size%</>
     EOD;
 
     private const STRUCTURE = <<<EOD
     <%structure_color%>%block_size%</>
-    <fg=black;options=bold;%structure_color%>  %structure%  </>
+    <fg=white;options=bold;%structure_color%>  %structure%  </>
     <%structure_color%>%block_size%</>
     EOD;
 
     private const STYLE = <<<EOD
     <%style_color%>%block_size%</>
-    <fg=black;options=bold;%style_color%>  %style%  </>
+    <fg=white;options=bold;%style_color%>  %style%  </>
     <%style_color%>%block_size%</>
     EOD;
 
@@ -197,7 +197,7 @@ final class Console implements Formatter
                 if ($insight->getTotalFix() === 0) {
                     continue;
                 }
-                $fix = "<fg=green>• [${category}] </><bold>{$insight->getTitle()}</bold>:";
+                $fix = "<fg=green>• [{$category}] </><bold>{$insight->getTitle()}</bold>:";
 
                 $details = $insight->getFixPerFile();
                 /** @var Details $detail */
@@ -380,7 +380,7 @@ final class Console implements Formatter
 
                 $previousCategory = $category;
 
-                $issue = "\n<fg=red>•</> [${category}] <bold>{$insight->getTitle()}</bold>";
+                $issue = "\n<fg=red>•</> [{$category}] <bold>{$insight->getTitle()}</bold>";
 
                 if (! $insight instanceof HasDetails && ! $this->style->getOutput()->isVerbose()) {
                     $this->style->writeln($issue);
@@ -419,7 +419,7 @@ final class Console implements Formatter
                         $detailString .= ($detailString !== '' ? ': ' : '') . $this->parseDetailMessage($detail);
                     }
 
-                    $issue .= "\n  ${detailString}";
+                    $issue .= "\n  {$detailString}";
                 }
 
                 if (! $this->style->getOutput()->isVerbose() && $totalDetails > 3) {

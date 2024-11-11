@@ -42,7 +42,7 @@ final class DefaultPreset implements PresetContract
                     'linesCountBetweenDifferentAnnotationsTypes' => 1,
                 ],
                 DeclareStrictTypesSniff::class => [
-                    'newlinesCountBetweenOpenTagAndDeclare' => 2,
+                    'linesCountBeforeDeclare' => 1,
                     'spacesCountAroundEqualsSign' => 0,
                 ],
                 UnusedUsesSniff::class => [
@@ -52,9 +52,7 @@ final class DefaultPreset implements PresetContract
                     'ignoreUnusedValuesWhenOnlyKeysAreUsedInForeach' => true,
                 ],
                 PropertyTypeHintSniff::class => [
-                    'enableNativeTypeHint' => $composer->hasPhpVersion()
-                        ? $composer->lowestPhpVersionIsGreaterThenOrEqualTo('7.4')
-                        : PHP_VERSION_ID >= 70_400,
+                    'enableNativeTypeHint' => PHP_VERSION_ID >= 70_400,
                 ],
             ],
         ];

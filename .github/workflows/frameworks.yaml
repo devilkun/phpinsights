@@ -10,19 +10,26 @@ jobs:
     symfony:
         runs-on: ${{ matrix.os }}
         strategy:
-            fail-fast: true
+            fail-fast: false
             matrix:
                 os: [ubuntu-latest]
-                version: ['^4.4', '@stable', '@dev'] # Test current LTS, current release, and future release
-                php: ['7.4', '8.0', '8.1']
+                version: ['^5.4', '@stable', '@dev'] # Test current LTS, current release, and future release
+                php: ['7.4', '8.0', '8.1', '8.2', '8.3']
                 composer-version: [v2]
+                include:
+                  - version: '^5.4'
+                    psr-simple-cache-version: '^1.0|^2.0'
+                  - version: '@stable'
+                    psr-simple-cache-version: '^1.0|^2.0|^3.0'
+                  - version: '@dev'
+                    psr-simple-cache-version: '^1.0|^2.0|^3.0'
         env:
             allow_failure: ${{ matrix.version == '@dev' }}
         name: "Symfony skeleton:${{ matrix.version }} - PHP${{ matrix.php }} - Composer ${{ matrix.composer-version }}"
 
         steps:
             - name: Checkout
-              uses: actions/checkout@v2
+              uses: actions/checkout@v3
               with:
                   path: phpinsights
             - name: Setup PHP
@@ -53,6 +60,14 @@ jobs:
                   composer config prefer-stable true
                   composer config minimum-stability dev
               continue-on-error: ${{ env.allow_failure == 'true' }}
+            - name: Require psr/simple-cache
+              working-directory: ./project
+              run: composer require "psr/simple-cache:${{ matrix.psr-simple-cache-version }}"
+              continue-on-error: ${{ env.allow_failure == 'true' }}
+            - name: Allow plugin
+              working-directory: ./project
+              run: composer config --no-plugins allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
+              continue-on-error: ${{ env.allow_failure == 'true' }}
             - name: Install PHPInsights
               working-directory: ./project
               run: composer require --dev "nunomaduro/phpinsights:*" -n --ansi --with-all-dependencies
@@ -71,19 +86,28 @@ jobs:
             fail-fast: false
             matrix:
                 os: [ubuntu-latest]
-                version: ['^8.0', 'dev-master']
-                php: ['7.4', '8.0', '8.1']
+                version: ['^10.0', '^9.0', '^8.0']
+                php: ['7.4', '8.0', '8.1', '8.2', '8.3']
                 composer-version: [v2]
+                include:
+                    -   version: '^10.0'
+                        phpunit: '^10.0'
+                    -   version: '^9.0'
+                        phpunit: '^9.0'
+                    -   version: '^8.0'
+                        phpunit: '^9.0'
                 exclude:
-                    -   version: 'dev-master'
+                    -   version: '^9.0'
                         php: '7.4'
-        env:
-            allow_failure: ${{ matrix.php == '8.0' || matrix.version == 'dev-master' }}
+                    -   version: '^10.0'
+                        php: '7.4'
+                    -   version: '^10.0'
+                        php: '8.0'
         name: "Laravel:${{ matrix.version }} - PHP${{ matrix.php }} - Composer ${{ matrix.composer-version }}"
 
         steps:
             - name: Checkout
-              uses: actions/checkout@v2
+              uses: actions/checkout@v3
               with:
                   path: phpinsights
             - name: Setup PHP
@@ -114,9 +138,13 @@ jobs:
                   composer config prefer-stable true
                   composer config minimum-stability dev
               continue-on-error: ${{ env.allow_failure == 'true' }}
-            - name: Require phpunit:^9
+            - name: Require phpunit
               working-directory: ./project
-              run: composer require --dev phpunit/phpunit:^9.0 --update-with-dependencies -n --ansi
+              run: composer require --dev phpunit/phpunit:${{ matrix.phpunit }} --update-with-dependencies -n --ansi
+              continue-on-error: ${{ env.allow_failure == 'true' }}
+            - name: Allow plugin
+              working-directory: ./project
+              run: composer config --no-plugins allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
               continue-on-error: ${{ env.allow_failure == 'true' }}
             - name: Install PHPInsights
               working-directory: ./project

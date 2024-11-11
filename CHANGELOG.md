@@ -4,6 +4,94 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v2.12.0]
+### Changed
+* Add support for sebastian/diff 6.0 by @IsraelPinheiro in [#692](https://github.com/nunomaduro/phpinsights/pull/692)
+* Fixed type error by @elnur-ibr in [#699](https://github.com/nunomaduro/phpinsights/pull/699)
+* Refs #695 - Fix deprecation for dynamic property by @Jibbarth in [#697](https://github.com/nunomaduro/phpinsights/pull/697)
+
+## [v2.11.0]
+### Changed
+* Upgrade to SF7 by @damien-louis in [#666](https://github.com/nunomaduro/phpinsights/pull/666)
+
+## [v2.10.0]
+### Changed
+* disable default ignore for dot/vcs files for single files [#663](https://github.com/nunomaduro/phpinsights/pull/663)
+
+## [v2.9.0]
+### Added
+* Add option to set timeout [#595](https://github.com/nunomaduro/phpinsights/pull/595)
+
+### Fixed
+* fix readonly final class architecture side effect issue PHP8.2 [#645](https://github.com/nunomaduro/phpinsights/pull/645)
+* add quotes around binary path [#655](https://github.com/nunomaduro/phpinsights/pull/655)
+* Fix error: The option "preset" with value "wordpress" is invalid [#646](https://github.com/nunomaduro/phpinsights/pull/646)
+* Fix non-existing default property [#652](https://github.com/nunomaduro/phpinsights/pull/652)
+* PHP 8.2 fix for dynamic property $exclude [#653](https://github.com/nunomaduro/phpinsights/pull/653)
+* Prevent the runner to swallow its threads error [#641](https://github.com/nunomaduro/phpinsights/pull/641)
+
+### Changed
+* Update GitHub actions [#633](https://github.com/nunomaduro/phpinsights/pull/633)
+* Test against php 8.3 [#660](https://github.com/nunomaduro/phpinsights/pull/660)
+
+## [v2.8.0]
+### Added
+* Added Laravel 10 and PHP 8.1 Support [#626](https://github.com/nunomaduro/phpinsights/pull/626)
+* fix string interpolation deprecation messages in PHP 8.2 [#628](https://github.com/nunomaduro/phpinsights/pull/628)
+
+### Changed
+* Update readme.md to 2023 [#627](https://github.com/nunomaduro/phpinsights/pull/627)
+* update phploc [#630](https://github.com/nunomaduro/phpinsights/pull/630)
+* update GH actions [#631](https://github.com/nunomaduro/phpinsights/pull/631)
+* Update Quick start [#625](https://github.com/nunomaduro/phpinsights/pull/625)
+* Adjust interpolation [#632](https://github.com/nunomaduro/phpinsights/pull/632)
+
+## [v2.7.0]
+### Added
+- Added support for slevomat/coding-standard:8.0 ([#611](https://github.com/nunomaduro/phpinsights/pull/611))
+
+### Changed
+- Fixed some wording and typos ([#606](https://github.com/nunomaduro/phpinsights/pull/606))
+- Docs: fixed typo ([#608](https://github.com/nunomaduro/phpinsights/pull/608))
+- Fixes typos in stub files. ([#607](https://github.com/nunomaduro/phpinsights/pull/607))
+- Grammar change ([#610](https://github.com/nunomaduro/phpinsights/pull/610))
+
+## [v2.6.1]
+### Changed
+- Changed the foreground color of the box labels in console output ([#600](https://github.com/nunomaduro/phpinsights/pull/600))
+
+## [v2.6.0]
+### Added
+- Describe how to exclude insight per particular method ([#543](https://github.com/nunomaduro/phpinsights/pull/543))
+
+### Changed
+- Update diff dependency ([#599](https://github.com/nunomaduro/phpinsights/pull/599))
+
+## [v2.5.0]
+### Added
+- Add WordPress adapter ([#378](https://github.com/nunomaduro/phpinsights/pull/378))
+
+### Changed
+- docs: Add White border to work on Dark Mode Theme ([#545](https://github.com/nunomaduro/phpinsights/pull/545))
+- Fix always loading CodeSniffer tokens ([#542](https://github.com/nunomaduro/phpinsights/pull/542))
+- Handle summary option in JsonFormatter ([#541](https://github.com/nunomaduro/phpinsights/pull/541))
+- Fixing required dependencies ([#591](https://github.com/nunomaduro/phpinsights/pull/591))
+- Update GH actions to run successfully ([#597](https://github.com/nunomaduro/phpinsights/pull/597))
+- Fix typos ([#594](https://github.com/nunomaduro/phpinsights/pull/594))
+
+## [v2.4.0]
+### Added
+- add laravel 9 to GH actions test suite ([#581](https://github.com/nunomaduro/phpinsights/pull/581))
+
+### Changed
+- Allow psr/simple-cache ^2.0 and ^3.0 ([#580](https://github.com/nunomaduro/phpinsights/pull/580))
+
+## [v2.3.0]
+### Changed
+- Feature/doc updates ([#571](https://github.com/nunomaduro/phpinsights/pull/571))
+- Update config key for ordered class elements fixer ([#574](https://github.com/nunomaduro/phpinsights/pull/574))
+- Remove composer dependency, insights, and tests ([#575](https://github.com/nunomaduro/phpinsights/pull/575))
+
 ## [v2.2.0]
 ### Fixed
 - Fix ComposerLoader ([#566](https://github.com/nunomaduro/phpinsights/pull/566))

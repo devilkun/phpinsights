@@ -39,7 +39,7 @@ return [
 By default, `phpinsights` will analyse all your php files in your project directory, except folders `bower_components`, `node_modules` and `vendor`.
 
 ::: tip For others preset
-In addition to theses folders :
+In addition to these folders :
 - With the **laravel** preset, `phpinsights` will exclude `config`, `storage`, `resources`, `bootstrap`, `nova`, `database`, `server.php`, `_ide_helper.php`, `_ide_helper_models.php`, `app/Providers/TelescopeServiceProvider.php` and `public`.
 - With the **symfony** preset, `phpinsights` will exclude `var`, `translations`, `config`, and `public`.
 - With the **magento2** preset, `phpinsights` will exclude `bin`, `dev`, `generated`, `lib`, `phpserver`, `pub`, `setup`, `update`, `var`, `app/autoload.php`, `app/bootstrap.php`, `app/functions.php` and `index.php`.
@@ -56,6 +56,38 @@ For example:
         '*Repository.php', // will exclude every php files that match pattern
         'src/Kernel.php' // will exclude this file only
     ],
+```
+
+## Exclude insight per particular method
+
+Open the insight class and look for `private const NAME` constant.
+
+> If the `NAME` constant doesn't exist, go to the `2nd option` paragraph (below).
+
+Copy value of the `NAME` constant and open a class with method that you would like exclude insight for. In the phpDoc add `@phpcsSuppress` annotation.
+
+#### Example
+
+After running `vendor/bin/phpinsights` you saw an error:
+
+```bash
+• [Code] Unused parameter:
+  src/YourClass.php:19: Unused parameter $thisIsUnusedParameter.
+```
+
+After verification [in documentation](https://phpinsights.com/insights/code.html#unused-parameter), you know that `\SlevomatCodingStandard\Sniffs\Functions\UnusedParameterSniff` class is responsible for the `[Code] Unused parameter` error and it contains `private const NAME = 'SlevomatCodingStandard.Functions.UnusedParameter’;`. Let's use it together with the `@phpcsSuppress` annotation:
+
+```php
+final class YourClass
+{
+    /**
+     * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter
+     */
+    public function yourMethod(array $thisIsUnusedParameter): void
+    {
+        // ...
+    }
+}
 ```
 
 ## Add Insights
@@ -128,7 +160,7 @@ For example, to remove "Unused Parameters" Insight only for some file:
 
 ```php
     'configure' => [
-        \PhpCsFixer\Fixer\Basic\BraceFixer::class => [
+        \PhpCsFixer\Fixer\Basic\BracesFixer::class => [
             'indent' => '  ',
 		],
     ],

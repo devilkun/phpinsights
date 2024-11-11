@@ -9,24 +9,39 @@ jobs:
     ci:
         runs-on: ubuntu-latest
         strategy:
-            fail-fast: true
+            fail-fast: false
             matrix:
-                php: ['7.4', '8.0', '8.1']
+                php: ['7.4', '8.0', '8.1', '8.2', '8.3']
                 dependency-version: [prefer-lowest, prefer-stable]
                 composer-version: [ v2 ]
+                include:
+                    -   php: '8.3'
+                        phpunit: '^10.0'
+                    -   php: '8.2'
+                        phpunit: '^10.0'
+                    -   php: '8.1'
+                        phpunit: '^10.0'
+                    -   php: '8.0'
+                        phpunit: '^9.0'
+                    -   php: '7.4'
+                        phpunit: '^9.0'
                 exclude:
                     -   dependency-version: prefer-lowest
                         php: '8.0'
                     -   dependency-version: prefer-lowest
                         php: '8.1'
+                    -   dependency-version: prefer-lowest
+                        php: '8.2'
+                    -   dependency-version: prefer-lowest
+                        php: '8.3'
         name: ${{ matrix.php }} - Composer ${{ matrix.composer-version }} --${{ matrix.dependency-version }}
 
         steps:
             - name: Checkout
-              uses: actions/checkout@v2
+              uses: actions/checkout@v3
 
             - name: Cache dependencies
-              uses: actions/cache@v1
+              uses: actions/cache@v3
               with:
                   path: ~/.composer/cache/files
                   key: dependencies-php-${{ matrix.php }}-composer-${{ matrix.composer-version }}
@@ -41,5 +56,14 @@ jobs:
 
             - name: Install Composer dependencies
               run: composer update --${{ matrix.dependency-version }} --ansi --no-interaction --prefer-dist
-            - name: Unit Tests
+
+            - name: Force PHPUnit version
+              run: composer require --dev phpunit/phpunit:${{ matrix.phpunit }} --update-with-dependencies -n --ansi
+
+            - name: Unit Tests via PHPUnit 9
+              if: matrix.phpunit == '^9.0'
+              run: vendor/bin/phpunit --color=always -c phpunit9.xml
+
+            - name: Unit Tests via PHPUnit 10
+              if: matrix.phpunit == '^10.0'
               run: vendor/bin/phpunit --color=always
